@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject, resource, signal } from '@angular/core';
 import { SearchInput } from "../../components/search-input/search-input";
 import { List } from "../../components/list/list";
+import { CountryApi } from '../../services/countryApi';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-by-capital',
@@ -8,7 +10,15 @@ import { List } from "../../components/list/list";
   templateUrl: './by-capital.html',
 })
 export class ByCapital {
-  protected onSearch(value: string): void {
-    console.log(value);
-  }
+  private countryApi = inject(CountryApi);
+  protected query = signal('');
+
+  protected countryResource = resource({
+    params: () => ({ query: this.query() }),
+    loader: async ({ params }) => {
+      if (!params.query) return [];
+
+      return await firstValueFrom(this.countryApi.searchByCapital(params.query));
+    }
+  });
 }
