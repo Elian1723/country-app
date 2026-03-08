@@ -3,7 +3,7 @@ import { CountryLayout } from './layouts/countryLayout/countryLayout';
 import { ByCapital } from './pages/by-capital/by-capital';
 import { ByCountry } from './pages/by-country/by-country';
 import { ByRegion } from './pages/by-region/by-region';
-import { Country } from './pages/country/country';
+import { ByCode } from './pages/by-code/by-code';
 
 export const routes: Routes = [
   {
@@ -24,7 +24,7 @@ export const routes: Routes = [
       },
       {
         path: 'by/:code',
-        component: Country
+        component: ByCode
       },
       {
         path: '**',
