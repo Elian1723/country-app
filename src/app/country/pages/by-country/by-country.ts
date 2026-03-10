@@ -1,8 +1,9 @@
-import { Component, inject, resource, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { SearchInput } from "../../components/search-input/search-input";
 import { List } from "../../components/list/list";
 import { CountryApi } from '../../services/countryApi';
-import { firstValueFrom } from 'rxjs';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-by-country',
@@ -13,12 +14,12 @@ export class ByCountry {
   private countryApi = inject(CountryApi);
   protected query = signal('');
 
-  protected countryResource = resource({
+  protected countryResource = rxResource({
     params: () => ({ query: this.query() }),
-    loader: async ({ params }) => {
-      if (!params.query) return [];
+    stream: ({ params }) => {
+      if (!params.query) return of([]);
 
-      return await firstValueFrom(this.countryApi.searchByCapital(params.query));
+      return this.countryApi.searchByCapital(params.query);
     }
   });
 }
