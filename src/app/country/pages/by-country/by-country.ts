@@ -19,7 +19,7 @@ export class ByCountry {
     stream: ({ params }) => {
       if (!params.query) return of([]);
 
-      return this.countryApi.searchByCapital(params.query);
+      return this.countryApi.searchByCountry(params.query);
     }
   });
 }
