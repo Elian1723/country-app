@@ -1,7 +1,7 @@
-<section class="mx-10">
-  <h1 class="text-3xl">{{ country().name }}</h1>
+<section class="mx-3">
+  <h1 class="text-3xl text-center sm:text-left">{{ country().name }}</h1>
 
-  <section class="stats shadow mx-5">
+  <section class="stats stats-vertical sm:stats-horizontal shadow mx-5">
     <div class="stat place-items-center">
       <div class="static-title">Population</div>
       <div class="stat-value">{{ country().population | number}}</div>
@@ -10,24 +10,24 @@
 
     <div class="stat place-items-center">
       <div class="static-title">Name</div>
-      <div class="stat-value text-secondary">{{ country().name}}</div>
-      <div class="stat-dec text-secondary">{{ country().region }}</div>
+      <div class="stat-value text-secondary text-center wrap-break-word whitespace-normal">{{ country().name}}</div>
+      <div class="stat-dec text-secondary text-center wrap-break-word whitespace-normal">{{ country().region }}</div>
     </div>
 
     <div class="stat place-items-center">
       <div class="static-title">Sub Region</div>
-      <div class="stat-value">{{ country().subRegion}}</div>
-      <div class="stat-dec">{{ country().region }}</div>
+      <div class="stat-value text-center wrap-break-word whitespace-normal">{{ country().subRegion}}</div>
+      <div class="stat-dec text-center wrap-break-word whitespace-normal">{{ country().region }}</div>
     </div>
 
     <div class="stat place-items-center">
       <div class="static-title">Flag</div>
       <div class="stat-value">{{ country().flag}}</div>
-      <div class="stat-dec">{{ country().subRegion }}</div>
+      <div class="stat-dec text-center wrap-break-word whitespace-normal">{{ country().subRegion }}</div>
     </div>
   </section>
 
-  <section>
+  <section class="mb-7">
     <figure class="diff aspect-video" tabindex="0">
       <div class="diff-item-1" role="img" tabindex="0">
         <img

@@ -5,9 +5,9 @@
   <div class="flex-col">
     @for (region of regions; track $index) {
       <button
-        class="btn btn-outline mr-2 w-25"
+        class="btn btn-outline mt-2 me-2 w-25"
         (click)="selectedRegion.set(region)"
-        [class.btn-primary]="selectedRegion() === region">
+        [class.btn-info]="selectedRegion() === region">
         {{region}}
       </button>
     }
