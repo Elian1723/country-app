@@ -4,6 +4,7 @@ import { RESTCountry } from '../interfaces/rest-countries';
 import { catchError, delay, map, Observable, of, tap, throwError } from 'rxjs';
 import { CountryMapper } from '../mappers/country.mapper';
 import { Country } from '../interfaces/country';
+import { Region } from '../interfaces/region';
 
 const API_URL = 'https://restcountries.com/v3.1';
 
@@ -73,5 +74,8 @@ export class CountryApi {
           );
         })
       );
+  }
+
+  public searchByRegion() {
   }
 }
