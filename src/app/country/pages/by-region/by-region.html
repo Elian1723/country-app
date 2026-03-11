@@ -6,7 +6,7 @@
     @for (region of regions; track $index) {
       <button
         class="btn btn-outline mr-2 w-25"
-        (click)="selectRegion(region)"
+        (click)="selectedRegion.set(region)"
         [class.btn-primary]="selectedRegion() === region">
         {{region}}
       </button>
@@ -14,4 +14,10 @@
   </div>
 </section>
 
-<country-list [countries]="[]" />
+<country-list
+  [countries]="countryResource.hasValue() ? countryResource.value() : []"
+  [errorMessage]="countryResource.error()"
+  [isLoading]="countryResource.isLoading()"
+  [isEmpty]="countryResource.hasValue() && countryResource.value().length === 0"
+/>
+

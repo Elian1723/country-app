@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { RESTCountry } from '../interfaces/rest-countries';
-import { catchError, delay, map, Observable, of, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { CountryMapper } from '../mappers/country.mapper';
 import { Country } from '../interfaces/country';
 import { Region } from '../interfaces/region';
@@ -15,6 +15,7 @@ export class CountryApi {
   private http = inject(HttpClient);
   private queryCacheCapital = new Map<string, Country[]>();
   private queryCacheCountry = new Map<string, Country[]>();
+  private queryCacheRegion = new Map<Region, Country[]>();
 
   public searchByCapital(query: string): Observable<Country[]> {
     query = query.trim().toLowerCase();
@@ -25,7 +26,6 @@ export class CountryApi {
 
     return this.http.get<RESTCountry[]>(`${API_URL}/capital/${query}`)
       .pipe(
-        delay(3000),
         map(CountryMapper.mapRestCountryArrayToCountryArray),
         tap(countries => this.queryCacheCapital.set(query, countries)),
         catchError(error => {
@@ -44,8 +44,6 @@ export class CountryApi {
     if (this.queryCacheCountry.has(query)) {
       return of(this.queryCacheCountry.get(query) ?? []);
     }
-
-    console.log(`Consulting server for ${query}`);
 
     return this.http.get<RESTCountry[]>(`${API_URL}/name/${query}`)
       .pipe(
@@ -76,6 +74,24 @@ export class CountryApi {
       );
   }
 
-  public searchByRegion() {
+  public searchByRegion(region: Region): Observable<Country[]> {
+    const url = `${API_URL}/region/${region}`
+
+    if (this.queryCacheRegion.has(region)) {
+      return of(this.queryCacheRegion.get(region) ?? []);
+    }
+
+    return this.http.get<RESTCountry[]>(url)
+      .pipe(
+        map(CountryMapper.mapRestCountryArrayToCountryArray),
+        tap(countries => this.queryCacheRegion.set(region, countries)),
+        catchError(error => {
+          console.error('Error fetching countries by region:', error);
+
+          return throwError(
+            () => new Error('Not found any country with that region')
+          );
+        })
+      );
   }
 }
