@@ -12,6 +12,7 @@ export class CountryMapper {
       population: restCountry.population,
       region: restCountry.region,
       subRegion: restCountry.subregion,
+      isFavorite: false
     }
   }
 

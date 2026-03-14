@@ -4,6 +4,7 @@ import { ByCapital } from './pages/by-capital/by-capital';
 import { ByCountry } from './pages/by-country/by-country';
 import { ByRegion } from './pages/by-region/by-region';
 import { ByCode } from './pages/by-code/by-code';
+import { Favorites } from './pages/favorites/favorites';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,10 @@ export const routes: Routes = [
       {
         path: 'by/:code',
         component: ByCode
+      },
+      {
+        path: 'favorites',
+        component: Favorites
       },
       {
         path: '**',

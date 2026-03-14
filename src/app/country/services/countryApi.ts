@@ -5,6 +5,7 @@ import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { CountryMapper } from '../mappers/country.mapper';
 import { Country } from '../interfaces/country';
 import { Region } from '../interfaces/region';
+import { CountryFavorite } from './country-favorite';
 
 const API_URL = 'https://restcountries.com/v3.1';
 
@@ -13,6 +14,7 @@ const API_URL = 'https://restcountries.com/v3.1';
 })
 export class CountryApi {
   private http = inject(HttpClient);
+  private countryFavorite = inject(CountryFavorite);
   private queryCacheCapital = new Map<string, Country[]>();
   private queryCacheCountry = new Map<string, Country[]>();
   private queryCacheRegion = new Map<Region, Country[]>();
@@ -27,6 +29,10 @@ export class CountryApi {
     return this.http.get<RESTCountry[]>(`${API_URL}/capital/${query}`)
       .pipe(
         map(CountryMapper.mapRestCountryArrayToCountryArray),
+        map(countries => countries.map(c => ({
+          ...c,
+          isFavorite: this.countryFavorite.exists(c.cca2)
+        }))),
         tap(countries => this.queryCacheCapital.set(query, countries)),
         catchError(error => {
           console.error('Error fetching countries by capital:', error);
@@ -48,6 +54,10 @@ export class CountryApi {
     return this.http.get<RESTCountry[]>(`${API_URL}/name/${query}`)
       .pipe(
         map(CountryMapper.mapRestCountryArrayToCountryArray),
+        map(countries => countries.map(c => ({
+          ...c,
+          isFavorite: this.countryFavorite.exists(c.cca2)
+        }))),
         tap(countries => this.queryCacheCountry.set(query, countries)),
         catchError(error => {
           console.error('Error fetching countries by country name:', error);
@@ -63,6 +73,10 @@ export class CountryApi {
     return this.http.get<RESTCountry[]>(`${API_URL}/alpha/${code.trim()}`)
       .pipe(
         map(CountryMapper.mapRestCountryArrayToCountryArray),
+        map(countries => countries.map(c => ({
+          ...c,
+          isFavorite: this.countryFavorite.exists(c.cca2)
+        }))),
         map(countries => countries.at(0) ?? null),
         catchError(error => {
           console.error('Error fetching country by alpha code:', error);
@@ -84,6 +98,10 @@ export class CountryApi {
     return this.http.get<RESTCountry[]>(url)
       .pipe(
         map(CountryMapper.mapRestCountryArrayToCountryArray),
+        map(countries => countries.map(c => ({
+          ...c,
+          isFavorite: this.countryFavorite.exists(c.cca2)
+        }))),
         tap(countries => this.queryCacheRegion.set(region, countries)),
         catchError(error => {
           console.error('Error fetching countries by region:', error);

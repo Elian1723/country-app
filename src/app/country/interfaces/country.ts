@@ -7,4 +7,5 @@ export interface Country {
   population: number;
   region: string;
   subRegion: string;
+  isFavorite: boolean;
 }
